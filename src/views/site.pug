@@ -1,0 +1,40 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC', crossorigin='anonymous')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+
+        link(rel="stylesheet", href="/css/style.css")
+        title Document
+    body 
+        include ./includes/header
+        
+        .container.pd-100
+            h3 Boards
+            .row
+                each board, idx in boards
+                    .col-md-4.mt-4
+                        .card.text-bg-light
+                            img.card-img(src=`img/cover/${board.cover}`)
+                            .card-img-overlay
+                                h5.card-title=board.title
+                                p.card-time
+                                    - const updateDate = new Date(board.createDate);
+                                    - const currentDate = new Date();
+                                    - const timeDifference = (currentDate - updateDate) / (1000 * 60); // Đổi ra số phút
+                                    - const formattedDate = (timeDifference < 60) ? `${Math.round(timeDifference)} minutes ago`: (timeDifference < 1440)? `${Math.round(timeDifference / 60)} hours ago`: updateDate.toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                                    small= `Last update ${formattedDate}`
+                                .card-detail
+                                    a(href=`/board/detail/${board.id}`) Detail 
+                                        i.fa-solid.fa-arrow-right 
+                                .card-icons
+                                    a(href=`/board/edit/${board.id}` class="edit-icon")
+                                        i.fa-solid.fa-pen
+                                    a(href=`/board/delete/${board.id}` class="delete-icon")
+                                        i.fa-solid.fa-xmark
+
+        include ./includes/footer
+
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM', crossorigin='anonymous')

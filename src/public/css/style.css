@@ -1,0 +1,296 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Poppins",sans-serif;
+    color: #000000;;
+    background-color: #fff;
+    line-height: 1.6;
+    font-size: 15px;
+    margin: 0;
+    position: relative;
+}
+
+/* Card icon */
+.card-icons{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+    color: #fff; /* Màu chữ của icon */
+}
+
+
+
+.card-time {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    margin: 0;
+}
+
+.card-detail {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+}
+
+.card-icons i,  .card-detail a {
+    color: #fff;
+}
+
+.card-icons i:hover, .card-detail:hover a {
+    color: #ff9923;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+
+.card-icons .delete-icon i {
+    font-size: 25px;
+}
+
+.edit-icon,
+.delete-icon {
+    text-decoration: none;
+}
+
+.ipwidth {
+    width: 25%;
+}
+
+.ipwidth_1 {
+    width: 50%;
+}
+
+.card-list {
+    background-color: #000000!important;
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.card-list a:hover {
+    color: #ff9923;
+}
+
+.card-img {
+    height: 250px;
+    object-fit: cover;
+    filter: brightness(90%);
+}
+
+.card.text-bg-light:hover img  {
+
+    filter: brightness(70%);
+    transition: all 0.8 ease-in-out;
+}
+
+.text-bg-light {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.navbar-expand-lg {
+    padding:10px 20px;
+}
+
+.pd-100 {
+    padding: 50px;
+}
+
+.content {
+    min-height : 94vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.navbar-brand {
+    padding-left: 0.5rem;
+    color: white;
+    font-weight: 700;
+}
+
+.bg-white {
+    background-color: #0000003d!important;
+}
+
+
+.detail_title {
+    color: white;
+}
+
+.search-button {
+    margin-right: 24px;
+}
+
+.form__search {
+    --input-bg: #FFf;
+   /*  background of input */
+    --padding: 1.5em;
+    --rotate: 80deg;
+   /*  rotation degree of input*/
+    --gap: 2em;
+    /*  gap of items in input */
+    --icon-change-color: #ff9923;
+   /*  when rotating changed icon color */
+    --height: 30px;
+   /*  height */
+    width: 200px;
+    padding-inline-end: 1em;
+   /*  change this for padding in the end of input */
+    background: var(--input-bg);
+    position: relative;
+    border-radius: 10px;
+    border: 1px solid rgb(11, 11, 105, .3);
+  }
+  
+  .form__search label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--height);
+  }
+  
+  .form__search input {
+    width: 100%;
+    padding-inline-start: calc(var(--padding) + var(--gap));
+    outline: none;
+    background: none;
+    border: 0;
+  }
+  /* style for both icons -- search,close */
+  .form__search svg {
+    /* display: block; */
+    color: #111;
+    transition: 0.3s cubic-bezier(.4,0,.2,1);
+    position: absolute;
+    height: 15px;
+  }
+  /* search icon */
+  .form__search .icon {
+    position: absolute;
+    left: var(--padding);
+    transition: 0.3s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /* arrow-icon*/
+  .swap-off {
+    transform: rotate(-80deg);
+    opacity: 0;
+    visibility: hidden;
+  }
+  /* close button */
+  .close-btn {
+    /* removing default bg of button */
+    background: none;
+    border: none;
+    right: calc(var(--padding) - var(--gap));
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    padding: 0.1em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: 0.3s;
+    opacity: 0;
+    transform: scale(0);
+    visibility: hidden;
+  }
+  
+  .form__search input:focus ~ .icon {
+    transform: rotate(var(--rotate)) scale(1.3);
+  }
+  
+  .form__search input:focus ~ .icon .swap-off {
+    opacity: 1;
+    transform: rotate(-80deg);
+    visibility: visible;
+    color: var(--icon-change-color);
+  }
+  
+  .form__search input:focus ~ .icon .swap-on {
+    opacity: 0;
+    visibility: visible;
+  }
+  
+  .form__search input:valid ~ .icon {
+    transform: scale(1.3) rotate(var(--rotate))
+  }
+  
+  .form__search input:valid ~ .icon .swap-off {
+    opacity: 1;
+    visibility: visible;
+    color: var(--icon-change-color);
+  }
+  
+  .form__search input:valid ~ .icon .swap-on {
+    opacity: 0;
+    visibility: visible;
+  }
+  
+  .form__search input:valid ~ .close-btn {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: 0s;
+  }
+/* hết search form */
+ 
+/* phần navbar */
+
+.right_24px {
+    margin-right: 24px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#navbar {
+    background-color: #111!important;
+    color: white;
+}
+
+
+.nav-link {
+    padding-right: 28px!important;
+    font-weight: 500;
+    color: #fff;
+}
+
+.nav-link:hover {
+    color: #ff9923!important;
+}
+
+.active {
+    color: #ff9923!important;
+}
+
+.btn-primary {
+    background-color: #ff9923;
+    border: 1px solid #ff9923 !important;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    color: #ff9923!important;
+    background-color: black!important;
+}
+
+.row {
+    position: relative;
+}
