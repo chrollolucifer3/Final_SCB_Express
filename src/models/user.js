@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Board'
     }],
+    cards: [{
+         type: mongoose.Schema.Types.ObjectId, ref: 'Card'
+    }],
 });
 
 const User = mongoose.model('User', userSchema);

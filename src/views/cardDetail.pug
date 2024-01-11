@@ -35,8 +35,14 @@ html(lang="en")
                       | 
                       em #{attachment.updateAt.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
             
-            .card-attachments.mt-4
+            .card-member.mt-4
               h5.orange Member 
+              ul.mt-4.attachment
+                each member in card.members
+                  li= member.username
+            .card-member.mt-4
+              h5.orange Due Date 
+              p= card.dueDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             .card-time-add.mt-4 
               h5.orange Activity
               p

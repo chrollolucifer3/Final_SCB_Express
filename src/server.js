@@ -27,6 +27,9 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+const errHandler = require('./middlewares/errorHandler');
+app.use(errHandler);
+
 const route = require('./routes');
 route(app);
 

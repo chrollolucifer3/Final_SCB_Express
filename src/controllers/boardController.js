@@ -40,8 +40,7 @@ class BoardController {
             }
 
         } catch (error) {
-            console.error('Error creating board:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
 
@@ -50,8 +49,7 @@ class BoardController {
             const boards = await Board.findById(req.params.id);
             render(req, res, 'editboard', { boards });
         } catch (error) {
-            console.error('Error fetching boards:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
 
@@ -63,8 +61,7 @@ class BoardController {
             await Board.updateOne({_id: req.params.id}, {...formData, cover: fileName });
             res.redirect('/');
         } catch (error) {
-            console.error('Error fetching boards:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
 
@@ -90,8 +87,7 @@ class BoardController {
             
             res.redirect('back');
         } catch (error) {
-            console.error('Error deleting board:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
     
@@ -113,12 +109,9 @@ class BoardController {
 
             render(req, res, 'detail', { board: boardDetail, lists });
         } catch (error) {
-            console.error('Error fetching board detail:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     };
-    
-
     
 }
 

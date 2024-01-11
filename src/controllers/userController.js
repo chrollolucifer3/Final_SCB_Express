@@ -27,6 +27,9 @@ class UserController {
             res.redirect('login');
         } catch (error) {
             console.error('Error during user creation:', error);
+
+            // Truyền lỗi về middleware để xử lý trong route
+            return next(error);
         }
     }
 

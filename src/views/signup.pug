@@ -12,16 +12,18 @@ html(lang="en")
         .container
             h5.mt-4 Sign Up
             form.container.width.mt-4(method="POST" action="/create-user" enctype="application/x-www-form-urlencoded")
-                label(for="username-area" class="form-label") Username
-                input(type="text" class="form-control" name="username" id="username-area" required)
-                label(for="password-area" class="form-label") Password
-                input(type="password" class="form-control" name="password" id="password-area" required)
-                label(for="fullname-area" class="form-label") Full Name
-                input(type="text" class="form-control" name="fullname" id="fullname-area")
-                label(for="email-area" class="form-label") Email
-                input(type="email" class="form-control" name="email" id="email-area")
-                button.btn.btn-primary.mt-4(type="submit") Submit
-
+                fieldset.mb-3
+                    label(for="username-area" class="form-label") Username
+                    input(type="text" class="form-control" name="username" id="username-area" required)
+                    label(for="password-area" class="form-label") Password
+                    input(type="password" class="form-control" name="password" id="password-area" required)
+                    label(for="fullname-area" class="form-label") Full Name
+                    input(type="text" class="form-control" name="fullname" id="fullname-area")
+                    label(for="email-area" class="form-label") Email
+                    input(type="email" class="form-control" name="email" id="email-area")
+                    button.btn.btn-primary.mt-4(type="submit") Submit
+                if errMessage
+                    p.error=errMessage
 
         include ./includes/footer
 

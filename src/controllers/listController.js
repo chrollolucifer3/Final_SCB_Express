@@ -1,6 +1,8 @@
 const List = require('../models/list');
 const Board = require('../models/board');
 const render = require('../configs/render');
+
+
 class ListController {
 
     get = async (req, res, next) => {
@@ -26,8 +28,7 @@ class ListController {
             // // Truyền danh sách và thông tin bảng vào tệp Pug
             res.redirect(`/board/detail/${board.id}`);
         } catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
+            throw error;
         }
     }
 
@@ -42,17 +43,16 @@ class ListController {
             await List.findByIdAndDelete(listId);
             res.redirect('back');
         } catch (error) {
-            res.status(500).send('Internal Server Error');
+            throw error;
         }
     }
 
     edit = async (req, res, next) => {
         try {
             const lists = await List.findById(req.params.id);
-            res.render('editlist', {lists});
+            render(req, res, 'editlist', {lists});
         } catch (error) {
-            console.error('Error fetching lists:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
 
@@ -65,8 +65,7 @@ class ListController {
 
             res.redirect(`/board/detail/${updateList.boardId}`);
         } catch (error) {
-            console.error('Error fetching List:', error.message);
-            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
     }
 }
