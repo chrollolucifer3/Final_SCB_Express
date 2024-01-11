@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const listController = require('../controllers/listController');
+const auth = require('../middlewares/auth');
 
-router.post('/create-list', listController.create);
-router.get('/delete-list/:id', listController.delete);
-router.get('/edit-list/:id', listController.edit);
-router.post('/list/update/:id', listController.update)
+router.get('/:id/create-list', auth, listController.get);
+router.post('/:id/list-store', auth, listController.create);
+router.get('/delete-list/:id', auth, listController.delete);
+router.get('/edit-list/:id', auth, listController.edit);
+router.post('/list/update/:id', auth, listController.update);
+
+
 module.exports = router;

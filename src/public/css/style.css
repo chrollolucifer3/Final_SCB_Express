@@ -25,7 +25,17 @@ body {
     color: #fff; /* Màu chữ của icon */
 }
 
+.delete-card {
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+}
 
+.card-content {
+    position: relative;
+}
 
 .card-time {
     position: absolute;
@@ -46,9 +56,39 @@ body {
     color: #fff;
 }
 
+.italic {
+    font-style: italic;
+}
+
+.content-attachment {
+    background-color: rgb(0, 0, 0, 0.8);
+    border-radius: 25px;
+    padding: 50px 25px;
+}
+
 .card-icons i:hover, .card-detail:hover a {
     color: #ff9923;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.card-description textarea {
+    color: #000000;
+}
+
+.orange {
+    color: #ff9923;
+}
+
+.attachment {
+    font-size: 14px;
+}
+
+.content {
+    color: white;
+}
+
+li {
+    list-style: none;
 }
 
 
@@ -56,13 +96,31 @@ body {
     font-size: 25px;
 }
 
+.list-group-item {
+    list-style: none;
+    color: white;
+    margin: 3px 4px;
+    border-radius: 5px;
+    background-color: #ffffff0f!important;
+}
+
+
 .edit-icon,
 .delete-icon {
     text-decoration: none;
 }
 
+.error {
+    color: red;
+    font-style: italic;
+}
+
 .ipwidth {
     width: 25%;
+}
+
+.left {
+    margin-left: 12px;
 }
 
 .ipwidth_1 {

@@ -13,14 +13,17 @@ html(lang="en")
 
     .container.mt-4.pd-100
         h1 Create Card
-        form.container.mt-4(method="POST" action="/card/store" enctype="multipart/form-data")
+        form.container.mt-4(method="POST" action=`/${listId}/card/store` enctype="multipart/form-data")
             .mb-3
                 label(for="Card-title" class="form-label") Card title
                 input(type="text" class="form-control ipwidth_1" name="title" id="card-title")
 
             .mb-3
-                label(for="attachment" class="form-label") Attach File
-                input(type="file" class="form-control ipwidth_1" name="attachment" id="attachment")
+                label(for="Card-description" class="form-label") Card description
+                textarea(cols="200", rows="5" class="form-control ipwidth_1" name="description" id="card-description")
+            //- .mb-3
+            //-     label(for="attachment" class="form-label") Attach File
+            //-     input(type="file" class="form-control ipwidth_1" name="attachment" id="attachment")
 
             .mb-3
                 label(for="cover" class="form-label") Card Cover

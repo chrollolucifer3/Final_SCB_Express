@@ -5,10 +5,11 @@ const listSchema = new mongoose.Schema({
     createDate : {type: Date, default: Date.now},  
     boardId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Board'
+        ref: 'Board',
+        required: true
     },
-    cardId: [{ type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Card' 
+    cards: [{ type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Card'
     }],
 });
 

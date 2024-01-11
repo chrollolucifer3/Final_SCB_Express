@@ -3,10 +3,11 @@ const app = express();
 const port = 3000;
 
 const cookieParser = require('cookie-parser');
-const verifyToken = require('./middlewares/verifyToken');
-
 app.use(cookieParser());
+const verifyToken = require('./middlewares/verifyToken');
 app.use(verifyToken);
+
+require('dotenv').config()
 
 // Kết nối với mongoDB
 const db = require('./configs/index');

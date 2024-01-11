@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const render = require('../configs/render');
 
 class UserController {
     get = async (req, res) => {
@@ -45,18 +45,23 @@ class UserController {
                     // Tạo token và lưu vào cookie
                     const token = jwt.sign({ username: dbUser.username }, process.env.KEY_JWT);
                     res.cookie('token', token, { httpOnly: true });
-                    res.redirect('/'); 
+                    res.redirect('/');
                 } else {
-                    res.render('login', { error: 'Invalid password' });
+                    res.render('login', { errMessage: 'Invalid password' });
                 }
             } else {
-                res.render('login', { error: `${req.body.username} not existed}` });
+                res.render('login', { errMessage: `${req.body.username} not existed` });
             }
         } catch (error) {
             console.error('Error during login:', error);
             res.status(500).send('Internal Server Error');
         }
     };
+
+    logOut = async (req, res, next) => {
+        res.clearCookie('token');
+        res.redirect('/');
+    }
 
 }
 

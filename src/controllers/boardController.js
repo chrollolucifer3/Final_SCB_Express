@@ -1,19 +1,41 @@
-const board = require('../models/board');
-const List = require('../models/list')
+const Board = require('../models/board');
+const List = require('../models/list');
+const User = require('../models/user');
+const Card = require('../models/card');
+const render = require('../configs/render');
 
 class BoardController {
 
     get = async (req, res, next) => {
-        res.render('createboard');
+        render(req, res, 'createboard');
     }
 
     create = async (req, res, next) => {
         try {
             if(!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
+                return res.status(400).json({ errMessage: 'No file uploaded' });
             } else {
-                req.body.cover = req.file.filename;
-                await board.create(req.body);
+
+                const user = await User.findOne({username: req.username});
+                
+                // Tạo board mới từ req.body
+                const newBoard = new Board({
+                    title: req.body.title,
+                    cover: req.file.filename,
+                    userId: user._id, // Lưu userId vào board
+                });
+
+                if (!user) {
+                    return res.status(404).json({ errMessage: 'User not found' });
+                }
+    
+                // Lưu boardid vào user
+                user.boards.push(newBoard._id);
+                await user.save();
+    
+                // Lưu board vào cơ sở dữ liệu
+                await newBoard.save();
+    
                 res.redirect('/');
             }
 
@@ -25,8 +47,8 @@ class BoardController {
 
     edit = async (req, res, next) => {
         try {
-            const boards = await board.findById(req.params.id);
-            res.render('editboard', { boards });
+            const boards = await Board.findById(req.params.id);
+            render(req, res, 'editboard', { boards });
         } catch (error) {
             console.error('Error fetching boards:', error.message);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -38,7 +60,7 @@ class BoardController {
             const formData = req.body;
 
             const fileName = req.file.filename;
-            await board.updateOne({_id: req.params.id}, {...formData, cover: fileName });
+            await Board.updateOne({_id: req.params.id}, {...formData, cover: fileName });
             res.redirect('/');
         } catch (error) {
             console.error('Error fetching boards:', error.message);
@@ -48,14 +70,23 @@ class BoardController {
 
     delete = async (req, res, next) => {
         try {
-            const boardID = req.params.id;
-            const boardDetail  = await board.findById(boardID);
-            
-            // Xóa danh sách trước khi xóa bảng
-            await List.deleteMany({ _id: { $in: boardDetail.lists } });
+
+            const user = await User.findOne({username: req.username});
+            const boardId = req.params.id;
+            const boardDetail = await Board.findById(boardId).populate('lists');
+
+            // Lặp qua từng danh sách và xóa tất cả các card trong danh sách đó
+            for (const list of boardDetail.lists) {
+                await Card.deleteMany({ listId: list._id });
+            }
     
-            // Sau đó xóa bảng
-            await board.deleteOne({ _id: boardID });
+            // Sau đó xóa danh sách và bảng
+            await List.deleteMany({ _id: { $in: boardDetail.lists } });
+            await Board.deleteOne({ _id: boardId });
+            await user.updateOne(
+                { boards: boardId },
+                { $pull: { boards: boardId } }
+            );
             
             res.redirect('back');
         } catch (error) {
@@ -67,15 +98,27 @@ class BoardController {
 
     detail = async (req, res, next) => {
         try {
-            const boardDetail = await board.findById(req.params.id);
-            const lists = await List.find({ _id: { $in: boardDetail.lists } });
-            res.render('detail', { board: boardDetail, lists });
+            // Lấy thông tin board và sử dụng populate để lấy danh sách các list và cards
+            const boardDetail = await Board.findById(req.params.id)
+                .populate({
+                    path: 'lists',
+                    populate: {
+                        path: 'cards',
+                    },
+                });
+    
+            // Lấy danh sách các list từ thông tin board
+            const lists = boardDetail.lists;
+    
+
+            render(req, res, 'detail', { board: boardDetail, lists });
         } catch (error) {
             console.error('Error fetching board detail:', error.message);
             res.status(500).json({ error: 'Internal Server Error' });
         }
-    }
+    };
     
+
     
 }
 

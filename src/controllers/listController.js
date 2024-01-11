@@ -1,25 +1,30 @@
 const List = require('../models/list');
 const Board = require('../models/board');
-
+const render = require('../configs/render');
 class ListController {
+
+    get = async (req, res, next) => {
+        const boardId = req.params.id;
+        render(req, res, 'createList', {boardId});
+    }
+
     create = async (req, res, next) => {
-        const { title, boardId } = req.body;
+        
+        const boardId = req.params.id;
+        const title = req.body.title;
+
         try {
             const newList = new List({ title, boardId });
 
             await newList.save();
-    
-            const updatedBoard = await Board.findByIdAndUpdate(
+            
+            const board = await Board.findByIdAndUpdate(
                 boardId,
                 { $push: { lists: newList._id } },
-                { new: true }
             );
 
-            // Lấy thông tin chi tiết của toàn bộ danh sách
-            const lists = await List.find({ _id: { $in: updatedBoard.lists } });
-
             // // Truyền danh sách và thông tin bảng vào tệp Pug
-            res.render('detail', {board :updatedBoard, lists });
+            res.redirect(`/board/detail/${board.id}`);
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

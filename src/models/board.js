@@ -8,6 +8,11 @@ const boardSchema = new mongoose.Schema({
         ref: 'List' 
     }],
     cover: {type: String},
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 })
 
 
