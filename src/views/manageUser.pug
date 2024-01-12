@@ -1,0 +1,40 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC', crossorigin='anonymous')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+    link(rel="stylesheet", href="/css/style.css")
+    title Manage User
+  body 
+    include ./includes/header
+    
+    .container.mt-4.pd-100
+        h1 Manage User
+        
+        .form-floating.mb-3.mt-4
+            textarea.form-control( placeholder="Leave a comment here", id="floatingTextarea2Disabled", disabled)= username
+            label(for="floatingTextarea2Disabled") Username
+
+        .form-floating.mb-3
+            textarea.form-control( placeholder="Leave a comment here", id="floatingTextarea2Disabled", disabled)= user.fullname
+            label(for="floatingTextarea2Disabled") Full Name
+        
+        .form-floating.mb-3
+            textarea.form-control( placeholder="Leave a comment here", id="floatingTextarea2Disabled", disabled)= user.email
+            label(for="floatingTextarea2Disabled") Email
+        
+        .form-floating.mb-3
+            textarea.form-control( placeholder="Leave a comment here", id="floatingTextarea2Disabled", disabled)= user.phone
+            label(for="floatingTextarea2Disabled") Phone
+
+        .mt-4   
+            a.btn.btn-primary(href=`/change-password`) Change Password
+        
+        
+    
+
+    include ./includes/footer
+
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM', crossorigin='anonymous')

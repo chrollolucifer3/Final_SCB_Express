@@ -21,7 +21,7 @@ verifyToken = (req, res, next) => {
     if(req.cookies && req.cookies.token) {
         try {
             let token = req.cookies.token;
-            const payload = jwt.verify(token,  process.env.KEY_JWT);
+            const payload = jwt.verify(token, process.env.KEY_JWT);
             req.username = payload.username;
             next();
         } catch (error) {

@@ -147,21 +147,18 @@ class CardController {
             // Tìm card
             const card = await Card.findById(cardId);
 
-            if (!card) {
-                return res.status(404).render('add-member', { errMessage: 'Thẻ không tồn tại' });
-            }
             // Kiểm tra xem thành viên đã tồn tại trong card hay chưa
             if (card.members && card.members.some(existingMember => existingMember.username === memberUsername)) {
-                return res.status(400).render('add-member', { cardId, errMessage: 'Thành viên đã được thêm vào thẻ' });
+                return render(req, res, 'add-member', { cardId, errMessage: 'Thành viên đã được thêm vào thẻ' });
             }
 
             if ( req.username === memberUsername ) {
-                return res.status(400).render('add-member', {cardId, errMessage: 'Không thể thêm chính mình vào thẻ' });
+                return render(req,res, 'add-member', {cardId, errMessage: 'Không thể thêm chính mình vào thẻ' });
             }
 
             const member = await User.findOne({ username: memberUsername });
             if (!member) {
-                return res.status(404).render('add-member', { cardId, errMessage: 'Thành viên không tồn tại' });
+                return render(req, res, 'add-member', { cardId, errMessage: 'Thành viên không tồn tại' });
             }
             
             // Thêm thành viên
@@ -180,13 +177,10 @@ class CardController {
         return res.redirect(`/${cardId}/card-detail`);
 
         } catch (error) {
-            console.error('Lỗi thêm thành viên:', error.message);
-            if (error.name === 'CastError') {
-                return res.status(400).render('add-member', {cardId, errMessage: 'ID thẻ hoặc ID thành viên không hợp lệ' });
+            throw error;
           }
-            return res.status(500).json({ error: 'Lỗi máy chủ nội bộ' });
-        }
     }
+
 }
 
 module.exports = new CardController;

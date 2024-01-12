@@ -16,8 +16,7 @@ class SiteController {
             // Chuyển giá trị username vào payload
             render(req, res, 'site', { boards });
         } catch (error) {
-            console.error('Error in SiteController.get:', error.message);
-            res.status(500).json({ msg: "Lỗi" });
+            throw error;
         }
     }
 }

@@ -2,6 +2,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const render = require('../configs/render');
+const Card = require('../models/card');
 
 class UserController {
     get = async (req, res) => {
@@ -19,9 +20,10 @@ class UserController {
 
             await User.create({
                 username: req.body.username,
+                password : hashedPassword,
                 fullname: req.body.fullname,
                 email: req.body.email,
-                password : hashedPassword
+                phone: req.body.phone,
             });
 
             res.redirect('login');
@@ -56,8 +58,7 @@ class UserController {
                 res.render('login', { errMessage: `${req.body.username} not existed` });
             }
         } catch (error) {
-            console.error('Error during login:', error);
-            res.status(500).send('Internal Server Error');
+            throw error;
         }
     };
 
@@ -66,6 +67,91 @@ class UserController {
         res.redirect('/');
     }
 
+    manageUser = async (req, res, next) => {
+        try {
+
+            const user = await User.findOne({username: req.username});
+
+            render(req, res, 'manageUser', {user}); 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getChange = async (req, res, next) => {
+        try {
+            render(req, res, 'changepassword'); 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    updatePassword = async (req, res, next) => {
+        try {
+            const {currentPassword, newPassword, confirmNewPassword  } = req.body;
+
+            const user = await User.findOne({username: req.username});
+
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if(!isMatch) {
+                return render(req, res, 'changepassword', { errMessage: 'Mật khẩu hiện tại không đúng' } );
+            }
+
+            if(newPassword !== confirmNewPassword) {
+                return render(req, res, 'changepassword', { errMessage: 'Mật khẩu mới và mật khẩu nhập lại không khớp.' });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+            user.password = hashedPassword;
+
+            await user.save();
+            res.clearCookie('token');
+
+            res.render('login')
+            
+        } catch (error) {
+            console.error('Error during password change:', error);
+            return next(error);
+        }
+    }
+
+    getCard = async (req, res, next) => {
+        try {
+            const user = await User.findOne({ username: req.username }).populate('cards');
+            const cards = user.cards;
+
+            render(req, res, 'managerCard', {cards});
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteCard = async (req, res, next) => {
+        try {
+            const cardId = req.params.id; 
+
+            const user = await User.findOne({ username: req.username });
+  
+            const card = await Card.findOne({ _id: cardId });
+            // Xóa card khỏi mảng cards của user
+            user.cards = user.cards.filter(userCardId => userCardId.toString() !== cardId);
+    
+            // Lưu thay đổi vào cơ sở dữ liệu cho user
+            await user.save();
+    
+            // Xóa userId khỏi mảng members của card
+            card.members = card.members.filter(member => member.userId.toString() !== req.userId);
+            
+            // Lưu thay đổi vào cơ sở dữ liệu cho card
+            await card.save();
+    
+           res.redirect('back');
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }
 
 module.exports = new UserController;

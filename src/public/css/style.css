@@ -96,7 +96,7 @@ li {
     font-size: 25px;
 }
 
-.list-group-item {
+.card-content {
     list-style: none;
     color: white;
     margin: 3px 4px;
@@ -140,6 +140,12 @@ li {
 
 .card-img {
     height: 250px;
+    object-fit: cover;
+    filter: brightness(90%);
+}
+
+.card-img-top {
+    height: 200px;
     object-fit: cover;
     filter: brightness(90%);
 }
@@ -351,4 +357,8 @@ a {
 
 .row {
     position: relative;
+}
+
+.text-color {
+    color: rgb(0, 0, 0)!important;
 }
