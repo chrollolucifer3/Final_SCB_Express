@@ -132,17 +132,16 @@ class UserController {
             const cardId = req.params.id; 
 
             const user = await User.findOne({ username: req.username });
-  
+
             const card = await Card.findOne({ _id: cardId });
             // Xóa card khỏi mảng cards của user
             user.cards = user.cards.filter(userCardId => userCardId.toString() !== cardId);
     
             // Lưu thay đổi vào cơ sở dữ liệu cho user
             await user.save();
-    
-            // Xóa userId khỏi mảng members của card
-            card.members = card.members.filter(member => member.userId.toString() !== req.userId);
             
+            // Xóa userId khỏi mảng members của card
+            card.members = card.members.filter(member => member.userId.toString() !== user.id);
             // Lưu thay đổi vào cơ sở dữ liệu cho card
             await card.save();
     
@@ -150,8 +149,7 @@ class UserController {
         } catch (error) {
             throw error;
         }
-    }
-    
+    } 
 }
 
 module.exports = new UserController;
