@@ -73,6 +73,30 @@ const validateChangePasswordData = (req, res, next) => {
     next();
 };
 
+const resetPasswordValidationSchema = Joi.object({
+  newPassword: Joi.string()
+      .min(8)
+      .required()
+      .pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/)
+      .messages({
+          'string.pattern.base': 'Mật khẩu phải chứa ít nhất 1 chữ viết hoa, 1 số, và 1 kí tự đặc biệt.',
+          'any.required': 'Mật khẩu mới không được bỏ trống.',
+          'string.min': 'Mật khẩu mới phải có ít nhất 8 kí tự.'
+      })
+});
+
+const validateResetPasswordData = (req, res, next) => {
+  const { error, value } = resetPasswordValidationSchema.validate(req.body, { abortEarly: false });
+  const token = req.params.token;
+  if (error) {
+      const errorMessages = error.details.map((detail) => detail.message);
+      return res.status(400).render('reset-pass',{token, errMessage: errorMessages });
+  }
+
+  req.body = value;
+  next();
+};
+
 router.post('/login',  userController.login);
 router.get('/login', userController.get);
 router.get('/signup', userController.signUp);
@@ -83,5 +107,9 @@ router.get('/change-password', auth, userController.getChange)
 router.post('/update-password', auth, validateChangePasswordData, userController.updatePassword);
 router.get('/manage-card', auth, userController.getCard);
 router.get('/:id/delete-card-added', auth, userController.deleteCard)
+router.post('/forgot-password', userController.forgotPass);
+router.get('/forgot-password', userController.getForgot);
+router.post('/reset-password/:token',validateResetPasswordData, userController.resetPass);
+router.get('/reset-password/:token', userController.getReset);
 
 module.exports = router;

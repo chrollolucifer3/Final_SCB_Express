@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema({
     cards: [{
          type: mongoose.Schema.Types.ObjectId, ref: 'Card'
     }],
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
 });
 
 const User = mongoose.model('User', userSchema);

@@ -6,22 +6,11 @@ html(lang="en")
         link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC', crossorigin='anonymous')
         link(rel="stylesheet", href="/css/style.css")
     
-        title Login
+        title Check your email
     body 
         include ./includes/header
-        .container.pd-100.d-flex.justify-content-center
-            
-            .form-container
-                h5.title Login
-                form.form(method="POST" action="/login")
-                    input.input(type='text', name='username', placeholder='Username' required)
-                    input.input(type='password', placeholder='Password', name='password' required)
-                    .page-link_form
-                        a(href="/forgot-password") 
-                            span.page-link-label Forgot Password?
-                    if errMessage
-                        p.error=errMessage
-                    button.form-btn(type="submit") Log in
+        .container 
+            h5.mt-4.pd-100.text-center Please check your email!
 
         include ./includes/footer
 

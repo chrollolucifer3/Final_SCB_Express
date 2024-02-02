@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const render = require('../configs/render');
 const Card = require('../models/card');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 class UserController {
     get = async (req, res) => {
@@ -150,6 +152,95 @@ class UserController {
             throw error;
         }
     } 
+
+    getForgot = async (req, res, next) => {
+        render(req, res, 'forgot-pass')
+    }
+
+    forgotPass = async (req, res, next) => {
+        try {
+            const email = req.body.email;
+            const user = await User.findOne({ email });
+    
+            if (!user) {
+                return render(req, res, 'forgot-pass', { errMessage: 'Không tìm thấy email' });
+            }
+    
+            // Tạo mã ngẫu nhiên cho việc đặt lại mật khẩu
+            const resetToken = crypto.randomBytes(20).toString('hex');
+            // Lưu mã ngẫu nhiên và thời gian hết hạn vào cơ sở dữ liệu
+            user.resetPasswordToken = resetToken;
+            user.resetPasswordExpires = Date.now() + 3600000; // Hết hạn sau 1 giờ
+            await user.save();
+    
+            // Gửi email với liên kết đặt lại mật khẩu
+            const resetLink = `http://${req.headers.host}/reset-password/${resetToken}`;
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD 
+                }
+            });
+            await transporter.sendMail({
+                to: user.email,
+                subject: 'Password Reset',
+                html: `Click <a href="${resetLink}">here</a> to reset your password.`
+            });
+    
+            render(req, res, 'check-email');
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getReset = async (req, res, next) => {
+        try {
+            const token = req.params.token;
+            const user = await User.findOne({
+                resetPasswordToken: token,
+                resetPasswordExpires: {$gt: Date.now()}
+            });
+
+            if(!user) {
+                return render(req, res,'reset-pass',{token, message: 'Invalid or expired reset token' });
+            }
+
+            render(req, res, 'reset-pass', {token});
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    resetPass = async (req, res, next) => {
+        try {
+            const token = req.params.token;
+            const user = await User.findOne({
+                resetPasswordToken: token,
+                resetPasswordExpires: {$gt: Date.now()}
+            });
+
+            if(!user) {
+                return render(req, res,'reset-pass',{token, message: 'Invalid or expired reset token' });
+            }
+
+            // Mã hóa mật khẩu mới
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+        
+            // Cập nhật mật khẩu mới và xóa thông tin đặt lại mật khẩu trong cơ sở dữ liệu
+            user.password = hashedPassword;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+            await user.save();
+        
+            render(req, res, 'login');
+
+        } catch (error) {
+            console.error('Error during password change:', error);
+            return next(error);
+        }
+    }
 }
 
 module.exports = new UserController;

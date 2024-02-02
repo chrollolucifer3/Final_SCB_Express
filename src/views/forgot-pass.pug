@@ -6,21 +6,18 @@ html(lang="en")
         link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC', crossorigin='anonymous')
         link(rel="stylesheet", href="/css/style.css")
     
-        title Sign Up
+        title Forgot Password
     body 
         include ./includes/header
         .container.pd-100.d-flex.justify-content-center
+            
             .form-container
-                h5.title Sign Up
-                form.form(method="POST" action="/create-user" enctype="application/x-www-form-urlencoded")
-                        input.input(type="text" name="username" placeholder='Username' required)
-                        input.input(type="password" name="password" placeholder='password' required)
-                        input.input(type="text"  name="fullname" placeholder='fullname')
-                        input.input(type="email"  name="email" placeholder='email')
-                        input.input(type="text"  name="phone" placeholder='phone')
-                        if errMessage
-                            p.error=errMessage
-                        button.form-btn(type="submit") Submit
+                h5.title Forgot Password
+                form.form(method="POST" action="/forgot-password")
+                    input.input(type='email', placeholder='Email', name='email' required)
+                    if errMessage
+                        p.error=errMessage
+                    button.form-btn(type="submit") Submit
 
         include ./includes/footer
 
