@@ -4,6 +4,7 @@ const boardController = require('../controllers/boardController');
 const upload = require('../middlewares/multerConfig');
 const auth = require('../middlewares/auth');
 const Joi = require('joi'); 
+const render = require('../configs/render')
 
 const boardValidationSchema = Joi.object({
     title: Joi.string().required().messages({
@@ -13,18 +14,18 @@ const boardValidationSchema = Joi.object({
   });
   
   const validateBoardTitle = (req, res, next) => {
-    const { error } = boardValidationSchema.validate(req.body, { abortEarly: false });
+    const {error, value  } = boardValidationSchema.validate(req.body, { abortEarly: false });
   
     if (error) {
       const errorMessages = error.details.map((detail) => detail.message);
-      return res.status(400).render('createboard', { errMessage: errorMessages });
+      return render(req, res, 'createboard', { errMessage: errorMessages });
     }
-  
+    req.body = value;
     next();
   };
 
 router.get('/create', auth, boardController.get)
-router.post('/store', auth, validateBoardTitle, upload.coverUpload.single('cover'), boardController.create)
+router.post('/store', auth,upload.coverUpload.single('cover'), validateBoardTitle, boardController.create)
 router.get('/edit/:id', auth, boardController.edit);
 router.post('/update/:id', auth, upload.coverUpload.single('cover'), boardController.update)
 router.get('/delete/:id', auth, boardController.delete);

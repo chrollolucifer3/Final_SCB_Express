@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const Joi = require('joi');
 const auth = require('../middlewares/auth');
+const render = require('../configs/render')
 
 const userValidationSchema = Joi.object({
   username: Joi.string().alphanum().min(8).required().messages({
@@ -33,8 +34,7 @@ const userValidationSchema = Joi.object({
     const { error, value } = userValidationSchema.validate(req.body, {abortEarly: false});
     if (error) {
       const errorMessages = error.details.map((detail) => detail.message);
-      res.locals.errMessage = errorMessages;
-      return res.status(400).render('signup', { errMessage: res.locals.errMessage });
+      return render(req, res, 'signup', { errMessage: errorMessages });
     }
   
     // Dữ liệu hợp lệ, gán lại vào req.body và chuyển đến middleware tiếp theo hoặc xử lý logic
@@ -66,7 +66,7 @@ const validateChangePasswordData = (req, res, next) => {
 
     if (error) {
         const errorMessages = error.details.map((detail) => detail.message);
-        return res.status(400).render('changepassword',{ errMessage: errorMessages });
+        return render(req, res, 'changepassword',{ errMessage: errorMessages });
     }
 
     req.body = value;
