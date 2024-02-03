@@ -19,11 +19,10 @@ html(lang="en")
                     input(type="text" class="form-control ipwidth_1" name="title" id="board-title")
                     label(for="formFile" class="form-label mt-4") Default file input example
                     input.form-control.ipwidth(type="file" id="formFile" name="cover")
+                    if errMessage
+                        p.error=errMessage
+                    button(type="submit" class="btn btn-primary") Create
 
-                button(type="submit" class="btn btn-primary") Create
-
-                if errMessage
-                    p.error=errMessage
 
 
         include ./includes/footer

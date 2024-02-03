@@ -13,7 +13,7 @@ class BoardController {
     create = async (req, res, next) => {
         try {
             if(!req.file) {
-                return res.status(400).json({ errMessage: 'No file uploaded' });
+                return render(req, res, 'createboard', { errMessage: 'No file uploaded' });
             } else {
 
                 const user = await User.findOne({username: req.username});
@@ -40,7 +40,10 @@ class BoardController {
             }
 
         } catch (error) {
-            throw error;
+            console.error('Error during user creation:', error);
+
+            // Truyền lỗi về middleware để xử lý trong route
+            return next(error);
         }
     }
 
