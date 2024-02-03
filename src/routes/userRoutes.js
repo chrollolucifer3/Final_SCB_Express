@@ -6,22 +6,22 @@ const auth = require('../middlewares/auth');
 
 const userValidationSchema = Joi.object({
   username: Joi.string().alphanum().min(8).required().messages({
-    'any.required': `"username" không được bỏ trống !`,
-    'string.min': 'Tên người dùng phải có ít nhất 8 kí tự.'
+    'any.required': `"username" cannot be left blank!`,
+    'string.min': 'Username must be at least 8 characters.'
   }),
   password: Joi.string().required().pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/).messages({
-    'string.pattern.base': 'Mật khẩu phải chứa ít nhất 1 chữ viết hoa, 1 số, và 1 kí tự đặc biệt.',
-    'any.required': 'Mật khẩu không được bỏ trống.'
+    'string.pattern.base': 'Password must contain at least 1 capital letter, 1 number, and 1 special character.',
+    'any.required': 'Password cannot be left blank.'
   })
   .min(8)
   .messages({
-    'string.min': 'Mật khẩu phải có ít nhất 8 kí tự.'
+    'string.min': 'Password must have at least 8 characters.'
   }),
   fullname: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().pattern(/^(0\d{9})$/).required().messages({
-    'string.pattern.base': 'Số điện thoại phải có đúng 10 số và bắt đầu bằng số 0.',
-    'any.required': 'Số điện thoại không được bỏ trống.'
+    'string.pattern.base': 'The phone number must have exactly 10 digits and start with 0.',
+    'any.required': 'Phone number cannot be left blank.'
   }),
   boards: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).min(1), // Assuming Board ObjectId
   cards: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).min(1)  // Assuming Card ObjectId
@@ -49,15 +49,15 @@ const userValidationSchema = Joi.object({
         .required()
         .pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/)
         .messages({
-            'string.pattern.base': 'Mật khẩu phải chứa ít nhất 1 chữ viết hoa, 1 số, và 1 kí tự đặc biệt.',
-            'any.required': 'Mật khẩu mới không được bỏ trống.',
-            'string.min': 'Mật khẩu mới phải có ít nhất 8 kí tự.'
+            'string.pattern.base': 'Password must contain at least 1 capital letter, 1 number, and 1 special character.',
+            'any.required': 'New password cannot be left blank.',
+            'string.min': 'The new password must have at least 8 characters.'
         }),
         confirmNewPassword: Joi.string()
         .required()
         .valid(Joi.ref('newPassword'))
         .messages({
-            'any.only': 'Mật khẩu nhập lại không khớp với mật khẩu mới.'
+            'any.only': 'The re-entered password does not match the new password.'
         })
 });
 
@@ -79,9 +79,9 @@ const resetPasswordValidationSchema = Joi.object({
       .required()
       .pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/)
       .messages({
-          'string.pattern.base': 'Mật khẩu phải chứa ít nhất 1 chữ viết hoa, 1 số, và 1 kí tự đặc biệt.',
-          'any.required': 'Mật khẩu mới không được bỏ trống.',
-          'string.min': 'Mật khẩu mới phải có ít nhất 8 kí tự.'
+          'string.pattern.base': 'Password must contain at least 1 capital letter, 1 number, and 1 special character.',
+          'any.required': 'New password cannot be left blank.',
+          'string.min': 'The new password must have at least 8 characters.'
       })
 });
 

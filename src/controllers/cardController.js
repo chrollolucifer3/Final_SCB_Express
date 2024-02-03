@@ -149,16 +149,16 @@ class CardController {
 
             // Kiểm tra xem thành viên đã tồn tại trong card hay chưa
             if (card.members && card.members.some(existingMember => existingMember.username === memberUsername)) {
-                return render(req, res, 'add-member', { cardId, errMessage: 'Thành viên đã được thêm vào thẻ' });
+                return render(req, res, 'add-member', { cardId, errMessage: 'The member has been added to the card' });
             }
 
             if ( req.username === memberUsername ) {
-                return render(req,res, 'add-member', {cardId, errMessage: 'Không thể thêm chính mình vào thẻ' });
+                return render(req,res, 'add-member', {cardId, errMessage: 'Cannot add yourself to a tag' });
             }
 
             const member = await User.findOne({ username: memberUsername });
             if (!member) {
-                return render(req, res, 'add-member', { cardId, errMessage: 'Thành viên không tồn tại' });
+                return render(req, res, 'add-member', { cardId, errMessage: 'Member does not exist' });
             }
             
             // Thêm thành viên

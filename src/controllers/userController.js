@@ -96,11 +96,11 @@ class UserController {
 
             const isMatch = await bcrypt.compare(currentPassword, user.password);
             if(!isMatch) {
-                return render(req, res, 'changepassword', { errMessage: 'Mật khẩu hiện tại không đúng' } );
+                return render(req, res, 'changepassword', { errMessage: 'Current password is incorrect' } );
             }
 
             if(newPassword !== confirmNewPassword) {
-                return render(req, res, 'changepassword', { errMessage: 'Mật khẩu mới và mật khẩu nhập lại không khớp.' });
+                return render(req, res, 'changepassword', { errMessage: 'The new password and the re-entered password do not match.' });
             }
 
             const salt = await bcrypt.genSalt(10);
